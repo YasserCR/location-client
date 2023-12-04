@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Map from '../components/Map';
-import '../styles/MapPage.css';
 import {
     getLocations,
     getLocationById,
