@@ -1,15 +1,15 @@
 export const getLocations = () => {
-    return fetch('http://localhost:3000/api/locations')
+    return fetch('https://theplaces.online/api/locations')
         .then(response => response.json())
 }
 
 export const getLocationById = (id) => {
-    return fetch(`http://localhost:3000/api/location/${id}`)
+    return fetch(`https://theplaces.online/api/location/${id}`)
         .then(response => response.json())
 }
 
 export const createLocation = (location) => {
-    return fetch('http://localhost:3000/api/location', {
+    return fetch('https://theplaces.online/api/location', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,7 +20,7 @@ export const createLocation = (location) => {
 }
 
 export const deleteLocation = (id) => {
-    return fetch(`http://localhost:3000/api/location/${id}`, {
+    return fetch(`https://theplaces.online/api/location/${id}`, {
         method: 'DELETE'
     })
         .then(response => {
@@ -33,7 +33,7 @@ export const deleteLocation = (id) => {
 }
 
 export const updateLocation = (id, data) => {
-    return fetch(`http://localhost:3000/api/location/${id}`, {
+    return fetch(`https://theplaces.online/api/location/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
