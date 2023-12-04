@@ -7,6 +7,11 @@ import {
     updateLocation,
     deleteLocation
 } from '../services/location.service'
+import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import '../styles/map-page.css';
+
 
 function MapPage() {
 
@@ -85,19 +90,25 @@ function MapPage() {
     };
 
     return (
-        <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
-            <div style={{ flex: 1 }}>
-                <h1>Lista de ubicaciones guardadas</h1>
-                <ul>
+        <div className="container">
+            <div className="list">
+                <h1>Ubicaciones guardadas</h1>
+                <List>
                     {locations.map(location => (
-                        <li key={location._id} onClick={() => handleClick(location._id)}>
-                            {location.name}
-                            <button onClick={() => handleUpdateClick(location._id)}>Actualizar</button>
-                            <button onClick={() => handleDelete(location._id)}>Eliminar</button>
-                        </li>
+                        <ListItem key={location._id} onClick={() => handleClick(location._id)}>
+                            <ListItemText primary={location.name} />
+                            <ListItemSecondaryAction>
+                                <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateClick(location._id)}>
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(location._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
                     ))}
-                </ul>
-                <button onClick={() => {
+                </List>
+                <Button onClick={() => {
                     setShowForm(!showForm);
                     if (!showForm) {
                         resetMap();
@@ -105,22 +116,23 @@ function MapPage() {
                     }
                 }}>
                     {showForm ? 'Cancelar' : 'Agregar nueva ubicación'}
-                </button>
+                </Button>
                 {showForm && (
                     <form onSubmit={handleSubmit}>
-                        <input
-                            name="name" value={newLocationName}
+                        <TextField
+                            name="name"
+                            value={newLocationName}
                             onChange={handleChange}
                             placeholder="Nombre"
                             required
                         />
-                        <button type="submit">
+                        <Button type="submit">
                             {selectedLocation ? 'Actualizar ubicación' : 'Crear nueva ubicación'}
-                        </button>
+                        </Button>
                     </form>
                 )}
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="map">
                 <Map
                     location={{ coordinates: { coordinates: newLocationCoordinates } }}
                     onMarkerDrag={handleMarkerDrag}
