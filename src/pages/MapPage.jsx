@@ -117,7 +117,7 @@ function MapPage() {
     return (
         <div className="container">
             <div className="list">
-                <h1>Ubicaciones guardadas</h1>
+                <h2>Ubicaciones guardadas</h2>
                 <List>
                     {locations.map(location => (
                         <ListItem key={location._id} onClick={() => handleClick(location._id)}>
@@ -133,28 +133,36 @@ function MapPage() {
                         </ListItem>
                     ))}
                 </List>
-                <Button onClick={() => {
-                    setShowForm(!showForm);
-                    if (!showForm) {
+                {!showForm && (
+                    <Button onClick={() => {
+                        setShowForm(true);
                         resetMap();
                         setNewLocationName('');
-                    }
-                }}>
-                    {showForm ? 'Cancelar' : 'Agregar nueva ubicación'}
-                </Button>
+                    }}>
+                        {'Agregar nueva ubicación'}
+                    </Button>
+                )}
                 {showForm && (
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            name="name"
-                            value={newLocationName}
-                            onChange={handleChange}
-                            placeholder="Nombre"
-                            required
-                        />
-                        <Button type="submit">
-                            {selectedLocation ? 'Actualizar ubicación' : 'Crear nueva ubicación'}
-                        </Button>
-                    </form>
+                    <div className='form-container'>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                className='location-input'
+                                name="name"
+                                value={newLocationName}
+                                onChange={handleChange}
+                                placeholder="Nombre"
+                                required
+                            />
+                            <div className="form-buttons">
+                                <Button type="submit">
+                                    {selectedLocation ? 'Actualizar ubicación' : 'Crear nueva ubicación'}
+                                </Button>
+                                <Button type="button" onClick={() => setShowForm(false)}>
+                                    Cancelar
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
                 )}
             </div>
             <div className="map">
@@ -193,7 +201,7 @@ function MapPage() {
                 </DialogActions>
             </Dialog>
 
-        </div>
+        </div >
     );
 }
 

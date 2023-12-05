@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import '../styles/map.css';
 
 function Map({ location, onMarkerDrag, draggable }) {
     const mapRef = useRef(null);
@@ -34,7 +35,7 @@ function Map({ location, onMarkerDrag, draggable }) {
         });
     }, [location, onMarkerDrag, draggable]);
 
-    return <div id="map" style={{ height: "100vh", width: "100%" }}></div>;
+    return <div id="map" className='map-render'></div>;
 }
 
 export default Map;
