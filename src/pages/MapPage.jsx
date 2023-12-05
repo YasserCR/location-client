@@ -7,7 +7,18 @@ import {
     updateLocation,
     deleteLocation
 } from '../services/location.service'
-import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
+import {
+    Button,
+    TextField,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+    IconButton,
+    Dialog,
+    DialogTitle,
+    DialogActions
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import '../styles/map-page.css';
@@ -21,6 +32,8 @@ function MapPage() {
     const [showForm, setShowForm] = useState(false);
     const [newLocationName, setNewLocationName] = useState('');
     const [newLocationCoordinates, setNewLocationCoordinates] = useState(defaultCoordinates);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
     useEffect(() => {
         getLocations().then(setLocations);
@@ -31,10 +44,17 @@ function MapPage() {
         setNewLocationCoordinates(defaultCoordinates);
     };
 
-    const handleDelete = async (id) => {
-        await deleteLocation(id);
-        const updatedLocations = locations.filter(location => location._id !== id);
+    const handleOpenDialog = (location) => {
+        setSelectedLocation(location);
+        setOpenDialog(true);
+    };
+
+    const handleDelete = async () => {
+        await deleteLocation(selectedLocation._id);
+        const updatedLocations = locations.filter(location => location._id !== selectedLocation._id);
         setLocations(updatedLocations);
+        resetMap();
+        setOpenDialog(false);
     };
 
     const handleUpdateClick = async (id) => {
@@ -61,6 +81,10 @@ function MapPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setOpenUpdateDialog(true);
+    };
+
+    const handleUpdateConfirm = async () => {
         let updatedLocations;
         if (selectedLocation) {
             const updatedLocation = await updateLocation(selectedLocation._id, {
@@ -82,11 +106,12 @@ function MapPage() {
                 }
             });
             updatedLocations = [...locations, createdLocation];
+            setNewLocationCoordinates(createdLocation.coordinates.coordinates);
         }
         setLocations(updatedLocations);
         setNewLocationName('');
-        setNewLocationCoordinates(defaultCoordinates);
         setShowForm(false);
+        setOpenUpdateDialog(false);
     };
 
     return (
@@ -101,7 +126,7 @@ function MapPage() {
                                 <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateClick(location._id)}>
                                     <EditIcon />
                                 </IconButton>
-                                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(location._id)}>
+                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDialog(location)}>
                                     <DeleteIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -139,6 +164,35 @@ function MapPage() {
                     draggable={showForm}
                 />
             </div>
+            <Dialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+            >
+                <DialogTitle>¿Estás seguro de que quieres borrar esta ubicación?</DialogTitle>
+                <DialogActions>
+                    <Button onClick={() => setOpenDialog(false)}>
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleDelete}>
+                        Borrar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openUpdateDialog}
+                onClose={() => setOpenUpdateDialog(false)}
+            >
+                <DialogTitle>¿Estás seguro de que quieres guardar los cambios?</DialogTitle>
+                <DialogActions>
+                    <Button onClick={() => setOpenUpdateDialog(false)}>
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleUpdateConfirm}>
+                        Guardar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </div>
     );
 }
