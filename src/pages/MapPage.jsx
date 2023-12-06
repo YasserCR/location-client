@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import Map from '../components/Map';
+import LocationForm from '../components/LocationForm';
+import LocationList from '../components/LocationList';
+import ConfirmationDialog from '../components/ConfirmationDialog';
 import {
     getLocations,
     getLocationById,
@@ -9,18 +12,7 @@ import {
 } from '../services/location.service'
 import {
     Button,
-    TextField,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
-    Dialog,
-    DialogTitle,
-    DialogActions
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import '../styles/map-page.css';
 
 
@@ -118,21 +110,12 @@ function MapPage() {
         <div className="container">
             <div className="list">
                 <h2>Ubicaciones guardadas</h2>
-                <List>
-                    {locations.map(location => (
-                        <ListItem key={location._id} onClick={() => handleClick(location._id)}>
-                            <ListItemText primary={location.name} />
-                            <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateClick(location._id)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDialog(location)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    ))}
-                </List>
+                <LocationList
+                    locations={locations}
+                    handleClick={handleClick}
+                    handleUpdateClick={handleUpdateClick}
+                    handleOpenDialog={handleOpenDialog}
+                />
                 {!showForm && (
                     <Button onClick={() => {
                         setShowForm(true);
@@ -143,26 +126,13 @@ function MapPage() {
                     </Button>
                 )}
                 {showForm && (
-                    <div className='form-container'>
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                className='location-input'
-                                name="name"
-                                value={newLocationName}
-                                onChange={handleChange}
-                                placeholder="Nombre"
-                                required
-                            />
-                            <div className="form-buttons">
-                                <Button type="submit">
-                                    {selectedLocation ? 'Actualizar ubicación' : 'Crear nueva ubicación'}
-                                </Button>
-                                <Button type="button" onClick={() => setShowForm(false)}>
-                                    Cancelar
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
+                    <LocationForm
+                        newLocationName={newLocationName}
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        setShowForm={setShowForm}
+                        selectedLocation={selectedLocation}
+                    />
                 )}
             </div>
             <div className="map">
@@ -172,34 +142,18 @@ function MapPage() {
                     draggable={showForm}
                 />
             </div>
-            <Dialog
+            <ConfirmationDialog
                 open={openDialog}
-                onClose={() => setOpenDialog(false)}
-            >
-                <DialogTitle>¿Estás seguro de que quieres borrar esta ubicación?</DialogTitle>
-                <DialogActions>
-                    <Button onClick={() => setOpenDialog(false)}>
-                        Cancelar
-                    </Button>
-                    <Button onClick={handleDelete}>
-                        Borrar
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog
+                handleClose={() => setOpenDialog(false)}
+                title="¿Estás seguro de que quieres borrar esta ubicación?"
+                handleConfirm={handleDelete}
+            />
+            <ConfirmationDialog
                 open={openUpdateDialog}
-                onClose={() => setOpenUpdateDialog(false)}
-            >
-                <DialogTitle>¿Estás seguro de que quieres guardar los cambios?</DialogTitle>
-                <DialogActions>
-                    <Button onClick={() => setOpenUpdateDialog(false)}>
-                        Cancelar
-                    </Button>
-                    <Button onClick={handleUpdateConfirm}>
-                        Guardar
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                handleClose={() => setOpenUpdateDialog(false)}
+                title="¿Estás seguro de que quieres guardar los cambios?"
+                handleConfirm={handleUpdateConfirm}
+            />
 
         </div >
     );
