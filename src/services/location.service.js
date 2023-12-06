@@ -25,6 +25,8 @@ export const deleteLocation = (id) => {
     })
         .then(response => {
             if (response.ok) {
+                // text => text ? JSON.parse(text) : {} es una forma de hacer un JSON.parse
+                //es necesario porque si no hay nada en el body, el response.json() da error
                 return response.text().then(text => text ? JSON.parse(text) : {})
             } else {
                 throw new Error('Error deleting location');

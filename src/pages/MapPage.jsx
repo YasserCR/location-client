@@ -18,6 +18,17 @@ import '../styles/map-page.css';
 
 function MapPage() {
 
+    /**
+     * Componente que muestra un mapa con una lista de ubicaciones
+     * declara los siguientes estados:
+     * @param {array} locations - Arreglo de ubicaciones
+     * @param {object} selectedLocation - Objeto con los datos de la ubicación seleccionada
+     * @param {boolean} showForm - Indica si se muestra el formulario o no
+     * @param {string} newLocationName - Nombre de la nueva ubicación
+     * @param {array} newLocationCoordinates - Arreglo con las coordenadas de la nueva ubicación
+     * @param {boolean} openDialog - Indica si se muestra el dialogo de confirmación o no
+     * @param {boolean} openUpdateDialog - Indica si se muestra el dialogo de confirmación de actualización o no
+     */
     const defaultCoordinates = [19.18095, -96.1429];
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState(null);
@@ -76,6 +87,14 @@ function MapPage() {
         setOpenUpdateDialog(true);
     };
 
+    /**
+     * Se ejecuta cuando se confirma la actualización de la ubicación
+     * Si la ubicación seleccionada existe, actualiza la ubicación
+     * Si la ubicación seleccionada no existe, crea una nueva ubicación
+     * Actualiza el estado de las ubicaciones
+     * Cierra el formulario
+     * Cierra el dialogo de confirmación
+     */
     const handleUpdateConfirm = async () => {
         let updatedLocations;
         if (selectedLocation) {
@@ -106,6 +125,20 @@ function MapPage() {
         setOpenUpdateDialog(false);
     };
 
+    /**
+     * Retorna un componente con un mapa y una lista de ubicaciones
+     * Si showForm es false, muestra un botón para agregar una nueva ubicación
+     * Si showForm es true, muestra el formulario para agregar una nueva ubicación
+     * Si showForm es true y selectedLocation existe, muestra el formulario para actualizar una ubicación
+     * Si showForm es true y selectedLocation no existe, muestra el formulario para crear una nueva ubicación
+     * Si showForm es true, muestra el mapa con el marcador arrastrable
+     * Si showForm es false, muestra el mapa con el marcador no arrastrable
+     * Si showForm es true, muestra el formulario para crear una nueva ubicación
+     * Si showForm es false, muestra la lista de ubicaciones
+     * Si showForm es true, muestra el formulario para actualizar una ubicación
+     * Si openDialog es true, muestra el dialogo de confirmación para borrar una ubicación
+     * Si openUpdateDialog es true, muestra el dialogo de confirmación para actualizar una ubicación
+     */
     return (
         <div className="container">
             <div className="list">

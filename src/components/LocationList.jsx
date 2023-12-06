@@ -3,6 +3,13 @@ import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } fro
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+/**
+ * Componente que muestra una lista de ubicaciones, recibe los siguientes props:
+ * @param {array} locations - Arreglo de ubicaciones
+ * @param {function} handleClick - Función que se ejecuta cuando se hace click en una ubicación
+ * @param {function} handleUpdateClick - Función que se ejecuta para actualizar una ubicación
+ * @param {function} handleOpenDialog - Función que se ejecuta para abrir el dialogo de confirmación
+ */
 function LocationList({ locations, handleClick, handleUpdateClick, handleOpenDialog }) {
     return (
         <List>

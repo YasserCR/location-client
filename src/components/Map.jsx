@@ -4,10 +4,24 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '../styles/map.css';
 
+/** 
+ * Componente que muestra un mapa con una ubicación, recibe los siguientes props:
+ * @param {object} location - Objeto con los datos de la ubicación
+ * @param {function} onMarkerDrag - Función que se ejecuta cuando se arrastra el marcador
+ * @param {boolean} draggable - Indica si el marcador es arrastrable o no
+*/
 function Map({ location, onMarkerDrag, draggable }) {
     const mapRef = useRef(null);
     const markerRef = useRef(null);
 
+    /**
+     * Se ejecuta cuando se monta el componente y cada vez que cambia la ubicación
+     * Si el mapa no existe, lo crea y lo guarda en el ref
+     * Si el mapa existe, lo actualiza
+     * Si el marcador existe, lo elimina
+     * Crea un marcador con la ubicación y lo guarda en el ref
+     * Agrega un evento al marcador para que se ejecute la función onMarkerDrag cuando se arrastre
+     */
     useEffect(() => {
         const [lat, lng] = location.coordinates.coordinates;
 
